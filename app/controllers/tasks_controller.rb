@@ -12,14 +12,14 @@ class TasksController < ApplicationController
   end
 
   def new
-    @task = @project.tasks.build
+    @task = @project.tasks.new
   end
 
   def edit
   end
 
   def create
-    @task = @project.tasks.build(task_params)
+    @task = @project.tasks.new(task_params)
 
     if @task.save
       redirect_to([@task.project])
@@ -37,9 +37,11 @@ class TasksController < ApplicationController
   end
 
   def destroy
+    @project = Project.find(params[:project_id])
+    @task = @project.tasks.find(params[:id])
     @task.destroy
 
-    redirect_to @project
+    redirect_to root_path
   end
 
   private
@@ -52,6 +54,6 @@ class TasksController < ApplicationController
     end
 
     def task_params
-      params.require(:task).permit(:name, :description, :project_id)
+      params.require(:task).permit(:name, :description, :project_id, :status)
     end
 end
