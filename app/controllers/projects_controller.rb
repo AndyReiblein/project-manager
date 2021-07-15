@@ -58,6 +58,15 @@ class ProjectsController < ApplicationController
 
   end
 
+  def search
+    if params[:search].blank?
+      redirect_to @project and return
+    else
+      @parameter = params[:search].downcase
+      @matchProject = Project.where('lower(name) LIKE ?', '%#{parameter}%')
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_project
